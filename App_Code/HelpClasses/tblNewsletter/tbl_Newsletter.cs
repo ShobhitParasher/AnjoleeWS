@@ -17,9 +17,10 @@ namespace tbl_Newsletter
 		private string _email_address = null;
 		private string _ip_address = null;
 		private string _date_signed = null;
-		#endregion
-		#region Public Get Set Properties
-		public string email_address
+        private int _Flag  = 0;
+        #endregion
+        #region Public Get Set Properties
+        public string email_address
 		{
 			get{return _email_address;}
 			set{_email_address=value;}
@@ -34,6 +35,11 @@ namespace tbl_Newsletter
 			get{return _date_signed;}
 			set{_date_signed=value;}
 		}
-		#endregion
-	}
+        public int Flag
+        {
+            get { return _Flag; }
+            set { _Flag = value; }
+        }
+        #endregion
+    }
 }

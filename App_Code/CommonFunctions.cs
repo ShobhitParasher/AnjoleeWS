@@ -80,7 +80,212 @@ namespace DBComponent
             }
             return ds;
         }
+        public DataSet GetCategoryMetaTag(string ProductGroupID)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
 
+            DataSet ds = new DataSet();
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "SP_GetMetaTagdata";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@ProductGroupId", ProductGroupID));
+            cmd.Connection = con;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(ds);
+            return ds;
+
+
+        }
+        public DataSet HomepageNotification()
+        {
+            SqlConnection con = GetConnection();
+            DataSet ds = new DataSet();
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "usp_HomepageNotification";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = con;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(ds);
+
+            return ds;
+        }
+        public DataSet GetProductSerachByStyleNo(string style)
+        {
+            try
+            {
+                if (object.Equals(db, null))
+                {
+                    db = new DataBase();
+                }
+                if (object.Equals(ds, null))
+                {
+                    ds = new DataSet();
+                }
+
+                param = new SqlParameter[1];
+                param[0] = db.MakeInParameter("@Style", SqlDbType.NVarChar, 500, style);
+                db.RunProcedure("SP_GetSerachByStyleNumber", param, out ds);
+                ResetAll();
+
+            }
+            catch (Exception ex)
+            {
+                string _strError = ex.ToString();
+            }
+            return ds;
+        }
+
+        public DataTable GetCategoryDetail(string ID)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetCategoryDetail";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+        
+        public DataTable GetBrandingImages(string GroupId)
+        {
+            SqlConnection con = GetConnection();
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "usp_GetThumbnailBannerImage";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ProductsProductsGroupID", GroupId));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+        public DataSet GetAllJewelleryCollection(string GroupidId)
+        {
+
+            SqlConnection con = GetConnection();
+            DataSet dsJewelleryCollection = new DataSet();
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "GetJCollections";
+            cmd.Parameters.Add(new SqlParameter("@ProductId", GroupidId));
+            cmd.Connection = con;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dsJewelleryCollection);
+            return dsJewelleryCollection;
+
+        }
+        public DataSet ProductNarrowSearch(string price, string caratweight, string stoneshape, string stonesetting, string JewelleryCollection, string GroupId, string NewArival, string SpecialOffer, string Sortingby, string PageIndex)
+        {
+            DataSet ds = new DataSet();
+
+
+            SqlConnection con = GetConnection();
+            DataSet dsNarrowSearch = new DataSet();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "P_GetProductThumbnailSearch";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@PRICE", price));
+                cmd.Parameters.Add(new SqlParameter("@CARATWEIGHT", caratweight));
+                cmd.Parameters.Add(new SqlParameter("@SHAPE", stoneshape));
+                cmd.Parameters.Add(new SqlParameter("@STONESETTINGS", stonesetting));
+                cmd.Parameters.Add(new SqlParameter("@JewelleryCollection", JewelleryCollection));
+                cmd.Parameters.Add(new SqlParameter("@id", GroupId));
+                cmd.Parameters.Add(new SqlParameter("@NewArival", NewArival));
+                cmd.Parameters.Add(new SqlParameter("@Show_All", SpecialOffer));
+                cmd.Parameters.Add(new SqlParameter("@SortingBy", Sortingby));
+                cmd.Parameters.Add(new SqlParameter("@startIndex", PageIndex));
+
+
+
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dsNarrowSearch);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return dsNarrowSearch;
+        }
+
+        public DataSet ProductThumbnailProductSearch(string EternityCollection,string price, string caratweight, string stoneshape, string stonesetting, string JewelleryCollection, string GroupId, string NewArival, string SpecialOffer, string Sortingby, string PageIndex)
+        {
+            DataSet ds = new DataSet();
+
+
+            SqlConnection con = GetConnection();
+            DataSet dsNarrowSearch = new DataSet();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "P_GetProductThumbnailSearch_NEW";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@EternityType", EternityCollection));
+                cmd.Parameters.Add(new SqlParameter("@PRICE", price));
+                cmd.Parameters.Add(new SqlParameter("@CARATWEIGHT", caratweight));
+                cmd.Parameters.Add(new SqlParameter("@SHAPE", stoneshape));
+                cmd.Parameters.Add(new SqlParameter("@STONESETTINGS", stonesetting));
+                cmd.Parameters.Add(new SqlParameter("@JewelleryCollection", JewelleryCollection));
+                cmd.Parameters.Add(new SqlParameter("@id", GroupId));
+                cmd.Parameters.Add(new SqlParameter("@NewArival", NewArival));
+                cmd.Parameters.Add(new SqlParameter("@Show_All", SpecialOffer));
+                cmd.Parameters.Add(new SqlParameter("@SortingBy", Sortingby));
+                cmd.Parameters.Add(new SqlParameter("@startIndex", PageIndex));
+
+
+
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dsNarrowSearch);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return dsNarrowSearch;
+        }
 
         public DataSet GetClassicBandcollection()
         {
@@ -127,6 +332,222 @@ namespace DBComponent
             db.RunProcedure("usp_Wedding_BandModern", param, out ds);
             ResetAll();
             return ds;
+        }
+
+        public DataSet GetLoosediamondData(string pageIndex, string shape, string cut, string color, string clarity, string polish, string symmetry, string fluorescence, string sort_col, string sort_type, string carat_weight, string price)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataSet ds = new DataSet();
+            try
+            {
+                int LastIndex = 50;
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "usp_loosediamonds";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Shape", shape);
+                cmd.Parameters.AddWithValue("@Carat", carat_weight);
+                cmd.Parameters.AddWithValue("@Price", price);
+                cmd.Parameters.AddWithValue("@Cut", cut);
+                cmd.Parameters.AddWithValue("@Color", color);
+                cmd.Parameters.AddWithValue("@Clarity", clarity);
+                cmd.Parameters.AddWithValue("@Polish", polish);
+                cmd.Parameters.AddWithValue("@Symmetry", symmetry);
+                cmd.Parameters.AddWithValue("@Fluorescence", fluorescence);
+                cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
+                cmd.Parameters.AddWithValue("@PageSize", LastIndex);
+                cmd.Parameters.AddWithValue("@sort_col", sort_col);
+                cmd.Parameters.AddWithValue("@sort_type", sort_type);
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(ds);
+                da.Dispose();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return ds;
+        }
+
+        public DataSet GetLandingPage(string ID)
+        {
+            SqlConnection con = GetConnection();
+            DataSet ds = new DataSet();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "usp_GetBreadcrubsURLMOWdetails_Landing";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@Search_Text", ID));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(ds);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return ds;
+        }
+
+
+        public DataSet LandingData(string GroupId, string NewArival, string SpecialOffer, string Sortingby,string PageIndex)
+        {
+            DataSet ds = new DataSet();
+
+            SqlConnection con = GetConnection();
+            DataSet dsNarrowSearch = new DataSet();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                //cmd.CommandText = "[usp_Landing_Product_Search]";
+                cmd.CommandText = "[usp_Landingpage_Detail_VER_1]";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ProductsGroupID", GroupId));
+                cmd.Parameters.Add(new SqlParameter("@NewArival", NewArival));
+                cmd.Parameters.Add(new SqlParameter("@Discount_Flag", SpecialOffer));
+                cmd.Parameters.Add(new SqlParameter("@Sort_Order", Sortingby));
+                cmd.Parameters.Add(new SqlParameter("@pageIndex", PageIndex));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dsNarrowSearch);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return dsNarrowSearch;
+        }
+    
+        public DataTable GetDiamondStudsEarringProducts(string ProductID, string Metaltype, string MetalValue, string Color, string Clarity)
+        {
+
+
+            SqlConnection con = GetConnection();
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "[usp_Calculate_Minimum_Price_Stud_Earings_New]";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ProductID", ProductID));
+                cmd.Parameters.Add(new SqlParameter("@MetalType", Metaltype));
+                cmd.Parameters.Add(new SqlParameter("@MetalValue", MetalValue));
+                cmd.Parameters.Add(new SqlParameter("@Color", Color));
+                cmd.Parameters.Add(new SqlParameter("@Clarity", Clarity));                
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return dt;
+        }
+
+        public DataSet GetLoosediamondSelectedData(string ID)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataSet ds = new DataSet();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetLooseDiamonds";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@DiamondID", ID));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(ds);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return ds;
+        }
+
+
+
+        public DataSet GetProductsConfigurations(string ProductID)
+        {
+            SqlConnection con = GetConnection();
+            DataSet ds = new DataSet();
+
+            try
+            {
+
+            con.Open();
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "usp_Products_Configurations";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@ProductID", ProductID));
+            cmd.Connection = con;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(ds);
+
+
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return ds;
+        }
+
+
+        public string GetProductCertiPrice()
+        {
+            string CertiPrice = string.Empty;
+            SqlConnection con = GetConnection();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductCertiPrice";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = con;
+                CertiPrice = (cmd.ExecuteScalar()).ToString();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return CertiPrice;
         }
 
         public DataTable GetStaticPagesNew(int PageID)
@@ -457,9 +878,10 @@ namespace DBComponent
                 cmd.Connection.Open();
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception Ex)
             {
-                string test = ex.ToString();
+                string test = Ex.ToString();
+                ErrorLog(Ex.Source, Ex.Message, Ex.TargetSite.ToString(), Ex.StackTrace, "ProductsOrdered5655");
             }
             finally
             {
@@ -1340,29 +1762,7 @@ namespace DBComponent
             return DiamondPrices;
         }
 
-        public string GetProductCertiPrice()
-        {
-            string CertiPrice = string.Empty;
-            SqlConnection con = GetConnection();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SP_GetProductCertiPrice";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Connection = con;
-                CertiPrice = (cmd.ExecuteScalar()).ToString();
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-            return CertiPrice;
-        }
+       
 
 
         public DataSet GetRapNetDataShapes(string ProductID, string Weight,string Color,string Clarity,string Cut,string Polish,string Symmetry,string Fluorescence)
@@ -1707,7 +2107,7 @@ namespace DBComponent
             return dsEnternityRingSize;
         }
 
-        public DataSet GetRingSizeDatanew(int Condition, string ProductId, string ProductSizeId, string RingSize)
+        public DataSet GetRingSizes(int Condition, string ProductId, string ProductSizeId, string RingSize)
         {
 
             SqlConnection con = GetConnection();
@@ -2277,21 +2677,7 @@ namespace DBComponent
             return dsNarrowSearch;
         }
 
-        public DataSet  GetAllJewelleryCollection(string GroupidId)
-        {
-           
-            SqlConnection con = GetConnection();
-            DataSet dsJewelleryCollection = new DataSet();
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "GetJCollections";
-            cmd.Parameters.Add(new SqlParameter("@ProductId", GroupidId));
-            cmd.Connection = con;
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(dsJewelleryCollection);
-            return dsJewelleryCollection;
-
-        }
+        
 
       
 
@@ -2474,7 +2860,7 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet GetRingSizeDataHTML5(int Condition, string ProductId, string ProductSizeId)
+        public DataSet GetEternityRingSize(int Condition, string ProductId, string ProductSizeId)
         {
             SqlConnection con = GetConnection();
             DataSet dsEnternityRingSize = new DataSet();
@@ -2856,49 +3242,7 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet ProductNarrowSearch(string price, string caratweight, string stoneshape, string stonesetting, string JewelleryCollection, string GroupId, string NewArival, string SpecialOffer,string Sortingby)
-        {
-            DataSet ds = new DataSet();
-            string startIndex = "1";
-            string lastIndex = "500";
-
-            SqlConnection con = GetConnection();
-            DataSet dsNarrowSearch = new DataSet();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "P_GetProductByNarrowSearch_Sorted";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@PRICE", price));
-                cmd.Parameters.Add(new SqlParameter("@CARATWEIGHT", caratweight));
-                cmd.Parameters.Add(new SqlParameter("@SHAPE", stoneshape));
-                cmd.Parameters.Add(new SqlParameter("@STONESETTINGS", stonesetting));
-                cmd.Parameters.Add(new SqlParameter("@JewelleryCollection", JewelleryCollection));
-                cmd.Parameters.Add(new SqlParameter("@id", GroupId));
-                cmd.Parameters.Add(new SqlParameter("@startIndex", startIndex));
-                cmd.Parameters.Add(new SqlParameter("@lastIndex", lastIndex));
-                cmd.Parameters.Add(new SqlParameter("@NewArival", NewArival));
-                cmd.Parameters.Add(new SqlParameter("@Show_All", SpecialOffer));
-                cmd.Parameters.Add(new SqlParameter("@SortingBy", Sortingby));
-               
-
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dsNarrowSearch);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-
-            return dsNarrowSearch;
-        }
-
+       
         
 
 
@@ -2944,31 +3288,7 @@ namespace DBComponent
             return dsNarrowSearch;
         }
 
-        public DataSet GetProductSerachByStyleNo(string style)
-        {
-            try
-            {
-                if (object.Equals(db, null))
-                {
-                    db = new DataBase();
-                }
-                if (object.Equals(ds, null))
-                {
-                    ds = new DataSet();
-                }
-
-                param = new SqlParameter[1];
-                param[0] = db.MakeInParameter("@Style", SqlDbType.NVarChar, 500, style);
-                db.RunProcedure("SP_GetProductSerachByStyleNo", param, out ds);
-                ResetAll();
-
-            }
-            catch (Exception ex)
-            {
-                string _strError = ex.ToString();
-            }
-            return ds;
-        }
+       
 
         public DataSet GetEnternityProductSearch(string EternityRing, string price, string caratweight, string stoneshape, string stonesetting, string newarrival, string SpecialOffer)
         {
@@ -3267,23 +3587,7 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet GetCategoryMetaTag(string ProductGroupID)
-        {
-            SqlConnection con = GetConnection();
-            System.Data.DataTable dt = new DataTable();
-           
-                DataSet ds = new DataSet();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SP_GetCategoryMetaTag";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@ProductGroupId", ProductGroupID));
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(ds);
-                return ds;
-           
-            
-        }
+      
 
         public DataSet GetProductMetaTag(string ID)
         {
@@ -3925,71 +4229,8 @@ namespace DBComponent
 
 
 
-        public DataSet GetLoosediamondData(string pageIndex, string shape, string cut, string color, string clarity, string polish, string symmetry, string fluorescence, string sort_col, string sort_type, string carat_weight, string price)
-        {
-            SqlConnection con = GetConnection();
-            System.Data.DataSet ds = new DataSet();
-            try
-            {
-                int LastIndex = 500;
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "usp_Rapnetloosediamonds_MOW";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Shape", shape);
-                cmd.Parameters.AddWithValue("@Carat", carat_weight);
-                cmd.Parameters.AddWithValue("@Price", price);
-                cmd.Parameters.AddWithValue("@Cut", cut);
-                cmd.Parameters.AddWithValue("@Color", color);
-                cmd.Parameters.AddWithValue("@Clarity", clarity);
-                cmd.Parameters.AddWithValue("@Polish", polish);
-                cmd.Parameters.AddWithValue("@Symmetry", symmetry);
-                cmd.Parameters.AddWithValue("@Fluorescence", fluorescence);
-                cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
-                cmd.Parameters.AddWithValue("@PageSize", LastIndex);
-                cmd.Parameters.AddWithValue("@sort_col", sort_col);
-                cmd.Parameters.AddWithValue("@sort_type", sort_type);            
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(ds);
-                da.Dispose();
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-            return ds;
-        }
-    
 
-        public DataSet GetLoosediamondSelectedData(string ID)
-        {
-            SqlConnection con = GetConnection();
-            System.Data.DataSet ds = new DataSet();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SP_GetLooseDiamonds";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@DiamondID", ID));
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(ds);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-            return ds;
-        }
+      
         public DataSet LooseDiamondThumbnailSearch(string gpuid, string pageIndex, string specialOffer, string Newarrival, string Settingtype, string Stoneshape, string Collection, string carat_weight, string sort_type, string sort_order)
         {
              SqlConnection con = GetConnection();
@@ -4057,7 +4298,7 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet LabCertifiedDiamondSearchEngineHTML(string ProductID, string Weight, string Color, string Clarity, string Cut, string Polish, string Symmetry, string Fluorescence, string MinPrice, string MaxPrice, string SortbyColumns, string Orderby)
+        public DataSet LabCertifiedDiamondSearchEngineOLD(string ProductID, string Weight, string Color, string Clarity, string Cut, string Polish, string Symmetry, string Fluorescence, string MinPrice, string MaxPrice, string SortbyColumns, string Orderby)
         {
             SqlConnection con = GetConnection();
             System.Data.DataSet ds = new DataSet();
@@ -4231,6 +4472,7 @@ namespace DBComponent
             catch (Exception ex)
             {
                 ex.ToString();
+                ErrorLog(ex.Source, ex.Message, ex.TargetSite.ToString(), ex.StackTrace, "UpdateShoppingCartItemsPart1data");
             }
             finally
             {
@@ -5259,34 +5501,9 @@ namespace DBComponent
 
         # endregion //---- Android Push Notification Message -----//
 
-        public DataSet GetTestMOWProductMergedata(string ProductID)
-        {
-            SqlConnection con = GetConnection();
-            DataSet ds = new DataSet();
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "usp_ProductData_MOW";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@ProductID", ProductID));
-            cmd.Connection = con;
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(ds);
+       
 
-            return ds;
-        }
-
-        public DataSet HomepageNotification()
-        {
-            SqlConnection con = GetConnection();
-            DataSet ds = new DataSet();
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "usp_HomepageNotification";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Connection = con;
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(ds);
-
-            return ds;
-        }
+      
 
         public DataSet LandingPageName(string SubCategoryId) 
         {
@@ -5303,70 +5520,10 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet LandingPageDetail(string GroupId, string NewArival, string SpecialOffer, string Sortingby)
-        {
-            DataSet ds = new DataSet();
-
-            SqlConnection con = GetConnection();
-            DataSet dsNarrowSearch = new DataSet();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "[usp_Landingpage_Detail_MOW]";
-                cmd.CommandType = CommandType.StoredProcedure;
-              
-              
-                cmd.Parameters.Add(new SqlParameter("@ProductsGroupID", GroupId));
-               
-                cmd.Parameters.Add(new SqlParameter("@NewArival", NewArival));
-                cmd.Parameters.Add(new SqlParameter("@Discount_Flag", SpecialOffer));
-                cmd.Parameters.Add(new SqlParameter("@Sort_Order", Sortingby));
+       
 
 
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dsNarrowSearch);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-
-            return dsNarrowSearch;
-        }
-
-
-        public DataSet GetLandingPage(string ID)
-        {
-            SqlConnection con = GetConnection();
-            DataSet ds = new DataSet();
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "usp_GetBreadcrubsURLMOWdetails_Landing";
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@Search_Text", ID));
-                cmd.Connection = con;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(ds);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-            finally
-            {
-                con.Close();
-            }
-            return ds;
-        }
-
+     
         public DataSet GetProductListURL(string ProductURL)
         {
             SqlConnection con = GetConnection();
@@ -5393,14 +5550,14 @@ namespace DBComponent
             return ds;
         }
 
-        public DataSet LabCertifiedCenterDiamondSearch(string ProductID, string Weight, string Color, string Clarity, string Cut, string Polish, string Symmetry, string Fluorescence, string MinPrice, string MaxPrice, string SortbyColumns, string Orderby,string PageIndex)
+        public DataSet LabCertifiedDiamondSearchEngine(string ProductID, string Weight, string Color, string Clarity, string Cut, string Polish, string Symmetry, string Fluorescence, string MinPrice, string MaxPrice, string SortbyColumns, string Orderby,string PageIndex)
         {
             SqlConnection con = GetConnection();
             System.Data.DataSet ds = new DataSet();
             try
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SP_GetLabCertifiedDiamondSearch_HTML5_NEW";
+                cmd.CommandText = "SP_GetLabCertifiedDiamondSearch_SearchData";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@ProductID", ProductID));
                 cmd.Parameters.Add(new SqlParameter("@weight", Weight));
@@ -5432,6 +5589,309 @@ namespace DBComponent
         }
 
 
+
+        public DataTable  GetLandingPageMetaTag(string ProductGroupID)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+
+            con.Open();
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "SP_LandingPageMetaData";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@id", ProductGroupID));
+            cmd.Connection = con;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dt);
+            return dt;
+
+        }
+
+
+        public DataTable GetThumbnailProductDetails(string ProductName)
+        {
+            SqlConnection con = GetConnection();
+            DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "usp_P_GetProductThumbnailSearch_Welcome";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ProductName", ProductName));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+
+        public DataTable GetProductDetailStoneType1(string ID, string sizeid)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailStoneType1";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        public DataTable GetProductDetailStoneType2(string ID, string sizeid)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailStoneType2";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+
+        public DataTable GetProductDetailDiamond(string ID, string sizeid, string stoneid)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailDiamond";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Parameters.Add(new SqlParameter("@stoneid", stoneid));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        public DataTable GetProductDetailColorStone(string ID, string sizeid, string stoneid)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailColorStone";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Parameters.Add(new SqlParameter("@stoneid", stoneid));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+
+        public DataTable GetProductDetailDiamondNew(string ID, string sizeid, string stoneid, string SelLength)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailDiamond_NEW";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Parameters.Add(new SqlParameter("@stoneid", stoneid));
+                cmd.Parameters.Add(new SqlParameter("@SelectedLength", SelLength));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+
+        public DataTable GetProductDetailColorStoneNew(string ID, string sizeid, string stoneid, string SelLength)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SP_GetProductDetailColorStone_New";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", ID));
+                cmd.Parameters.Add(new SqlParameter("@sizeid", sizeid));
+                cmd.Parameters.Add(new SqlParameter("@stoneid", stoneid));
+                cmd.Parameters.Add(new SqlParameter("@SelectedLength", SelLength));
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        public DataTable GetEternityStoneCarat_Sizes(int Condition, string ProductId, string ProductSizeId, string RingSize)
+        {
+            SqlConnection con = GetConnection();
+            System.Data.DataTable dt = new DataTable();
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "usp_Get_RingSize_CWCalc";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@CONDIATION", Condition));
+                cmd.Parameters.Add(new SqlParameter("@productID", ProductId));
+                cmd.Parameters.Add(new SqlParameter("@ProductSizeID", ProductSizeId));
+                cmd.Parameters.Add(new SqlParameter("@RingSize", Convert.ToDecimal(RingSize)));
+
+
+                cmd.Connection = con;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+
+        public DataSet GetRapNetdataShapeWise(string Productid, string Weight, string ProductSizeID, int pageIndex, int pageSize)
+        {
+            string constring = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constring))
+            {
+
+                using (SqlCommand cmd = new SqlCommand("usp_tbl_RepNet_DataField"))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@weight", Weight);
+                    cmd.Parameters.AddWithValue("@ProductID", Productid);
+                    cmd.Parameters.AddWithValue("@ProductSizeID", ProductSizeID);
+                    cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
+                    cmd.Parameters.AddWithValue("@PageSize", pageSize);
+                    cmd.Parameters.Add("@PageCount", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
+                    using (SqlDataAdapter sda = new SqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataSet ds = new DataSet())
+                        {
+                            sda.Fill(ds, "Customers");
+                            DataTable dt = new DataTable("PageCount");
+                            dt.Columns.Add("PageCount");
+                            dt.Rows.Add();
+                            dt.Rows[0][0] = cmd.Parameters["@PageCount"].Value;
+                            ds.Tables.Add(dt);
+                            return ds;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public DataSet GetThumbnaildata(string gpuid,string Flag)
+        {
+            SqlConnection con = GetConnection();
+            string query = "usp_MetaData_Detail";
+            SqlCommand cmd = new SqlCommand(query);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ProductsGroupID", gpuid);
+            cmd.Parameters.AddWithValue("@Flag", Flag);
+            cmd.Connection = con;
+            using (SqlDataAdapter sda = new SqlDataAdapter())
+            {
+                cmd.Connection = con;
+                sda.SelectCommand = cmd;
+                using (DataSet dsTH = new DataSet())
+                {
+                    sda.Fill(dsTH);
+                    return dsTH;
+                }
+            }
+        }
     }
    
 }

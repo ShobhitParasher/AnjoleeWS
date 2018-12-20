@@ -100,7 +100,7 @@ public class NVPAPICaller
         encoder["PAYMENTACTION"] = "Sale";
         encoder["CURRENCYCODE"] = "USD";
         ServicePointManager.Expect100Continue = true;
-        //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+       // System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
         string pStrrequestforNvp = encoder.Encode();
         string pStresponsenvp = HttpCall(pStrrequestforNvp);
 
@@ -231,7 +231,7 @@ public class NVPAPICaller
             encoder["METHOD"] = "GetExpressCheckoutDetails";
             encoder["TOKEN"] = token;
             ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             string pStrrequestforNvp = encoder.Encode();
             string pStresponsenvp = HttpCall(pStrrequestforNvp);
 
@@ -316,7 +316,7 @@ public class NVPAPICaller
             encoder["DESC"] = DESC;
             encoder["CUSTOM"] = CUSTOM;
             ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             string pStrrequestforNvp = encoder.Encode();
             string pStresponsenvp = HttpCall(pStrrequestforNvp);
 

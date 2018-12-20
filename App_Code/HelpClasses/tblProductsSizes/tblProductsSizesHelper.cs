@@ -574,7 +574,7 @@ namespace tblProductsSizes
         }
 
        
-        public DataSet ReturnProductSizesNew(string PID, string PSizeID, string SemiMount)
+        public DataSet ReturnProductSizes(string PID, string PSizeID, string SemiMount)
         {
 
             if (object.Equals(db, null))
